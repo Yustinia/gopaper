@@ -8,8 +8,9 @@ import (
 
 func main() {
 	client := internal.NewClient("ILXDm2WUnAwvbEkwr7WwulmT6kqwbvP7")
+	params := internal.NewSearch()
 
-	result, err := client.Search()
+	result, err := client.Search(params)
 	if err != nil {
 		panic(err)
 	}
