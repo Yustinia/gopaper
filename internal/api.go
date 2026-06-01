@@ -31,6 +31,25 @@ type Wallpaper struct {
 	Date       string `json:"created_at"`
 	Ratio      string `json:"ratio"`
 	Path       string `json:"path"`
+
+	// individual
+	WallUploader Uploader `json:"uploader"`
+	WallTags     []Tags   `json:"tags"`
+}
+
+type Uploader struct {
+	Username string `json:"username"`
+	Group    string `json:"group"`
+}
+
+type Tags struct {
+	ID         int    `json:"id"`
+	Name       string `json:"name"`
+	Alias      string `json:"alias"`
+	CategoryID int    `json:"category_id"`
+	Category   string `json:"category"`
+	Purity     string `json:"purity"`
+	Date       string `json:"created_at"`
 }
 
 type Meta struct {
@@ -50,6 +69,10 @@ type Query struct {
 type SearchResponse struct {
 	Metadata Meta        `json:"meta"`
 	Wall     []Wallpaper `json:"data"`
+}
+
+type WallpaperResponse struct {
+	Wall Wallpaper `json:"data"`
 }
 
 type SearchParams struct {
@@ -137,6 +160,32 @@ func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
 		return SearchResponse{}, fmt.Errorf("failed to decode: %w", err)
+	}
+
+	return result, nil
+}
+
+func (c *Client) GetWallpaperDetails(wallID string) (WallpaperResponse, error) {
+	var result WallpaperResponse
+
+	buildURL := fmt.Sprintf("%s/w/%s", c.BaseURL, wallID)
+	if c.APIKey != "" {
+		buildURL = fmt.Sprintf("%s?apikey=%s", buildURL, c.APIKey)
+	}
+
+	resp, err := http.Get(buildURL)
+	if err != nil {
+		return WallpaperResponse{}, fmt.Errorf("something went wrong: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return WallpaperResponse{}, fmt.Errorf("unexpected status: %d", resp.StatusCode)
+	}
+
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return WallpaperResponse{}, fmt.Errorf("failed to decode: %w", err)
 	}
 
 	return result, nil
