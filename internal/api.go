@@ -35,7 +35,7 @@ type Wallpaper struct {
 type Meta struct {
 	CurrentPage int             `json:"current_page"`
 	LastPage    int             `json:"last_page"`
-	PerPage     int             `json:"per_page"`
+	PerPage     string          `json:"per_page"`
 	Total       int             `json:"total"`
 	Seed        string          `json:"seed"`
 	SearchQuery json.RawMessage `json:"query"`

@@ -7,7 +7,14 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, World!")
-
 	client := internal.NewClient("ILXDm2WUnAwvbEkwr7WwulmT6kqwbvP7")
+
+	result, err := client.Search()
+	if err != nil {
+		panic(err)
+	}
+
+	for i, wall := range result.Wall {
+		fmt.Printf("[%d] %s\n", i, wall.Path)
+	}
 }
