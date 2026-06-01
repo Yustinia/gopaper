@@ -100,12 +100,17 @@ func NewClient(apiKey string) Client {
 	return Client{APIKey: apiKey, BaseURL: "https://wallhaven.cc/api/v1"}
 }
 
-func buildParams(sp SearchParams, apiKey string) url.Values {
+func buildBaseParams(apiKey string) url.Values {
 	params := url.Values{}
-
 	if apiKey != "" {
 		params.Set("apikey", apiKey)
 	}
+
+	return params
+}
+
+func buildParams(sp SearchParams, apiKey string) url.Values {
+	params := buildBaseParams(apiKey)
 
 	if sp.KeySearch != "" {
 		params.Set("q", sp.KeySearch)
@@ -141,52 +146,42 @@ func buildParams(sp SearchParams, apiKey string) url.Values {
 	return params
 }
 
-func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
-	var result SearchResponse
-	params := buildParams(sp, c.APIKey)
+func doRequest[respType any](url string) (respType, error) {
+	var result respType
 
-	buildURL := fmt.Sprintf("%s/search?%s", c.BaseURL, params.Encode())
-
-	resp, err := http.Get(buildURL)
+	resp, err := http.Get(url)
 	if err != nil {
-		return SearchResponse{}, fmt.Errorf("something went wrong: %w", err)
+		return result, fmt.Errorf("something went wrong: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return SearchResponse{}, fmt.Errorf("unexpected status: %d", resp.StatusCode)
+		return result, fmt.Errorf("unexpected status: %d", resp.StatusCode)
 	}
 
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
-		return SearchResponse{}, fmt.Errorf("failed to decode: %w", err)
+		return result, fmt.Errorf("failed to decode: %w", err)
 	}
 
 	return result, nil
 }
 
+func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
+	params := buildParams(sp, c.APIKey)
+
+	buildURL := fmt.Sprintf("%s/search?%s", c.BaseURL, params.Encode())
+
+	return doRequest[SearchResponse](buildURL)
+}
+
 func (c *Client) GetWallpaperDetails(wallID string) (WallpaperResponse, error) {
-	var result WallpaperResponse
+	params := buildBaseParams(c.APIKey)
 
 	buildURL := fmt.Sprintf("%s/w/%s", c.BaseURL, wallID)
 	if c.APIKey != "" {
-		buildURL = fmt.Sprintf("%s?apikey=%s", buildURL, c.APIKey)
+		buildURL = fmt.Sprintf("%s?%s", buildURL, params.Encode())
 	}
 
-	resp, err := http.Get(buildURL)
-	if err != nil {
-		return WallpaperResponse{}, fmt.Errorf("something went wrong: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return WallpaperResponse{}, fmt.Errorf("unexpected status: %d", resp.StatusCode)
-	}
-
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
-		return WallpaperResponse{}, fmt.Errorf("failed to decode: %w", err)
-	}
-
-	return result, nil
+	return doRequest[WallpaperResponse](buildURL)
 }
