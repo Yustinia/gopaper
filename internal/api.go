@@ -1,14 +1,14 @@
 package internal
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
 
 type Client struct {
 	APIKey  string
 	BaseURL string
-}
-
-func NewClient(apiKey string) Client {
-	return Client{APIKey: apiKey, BaseURL: "https://wallhaven.cc/api/v1"}
 }
 
 type Thumbs struct {
@@ -49,4 +49,34 @@ type Query struct {
 type SearchResponse struct {
 	Metadata Meta        `json:"meta"`
 	Wall     []Wallpaper `json:"data"`
+}
+
+func NewClient(apiKey string) Client {
+	return Client{APIKey: apiKey, BaseURL: "https://wallhaven.cc/api/v1"}
+}
+
+func (c *Client) Search() (SearchResponse, error) {
+	var result SearchResponse
+
+	buildURL := fmt.Sprintf("%s/search?", c.BaseURL)
+	if c.APIKey != "" {
+		buildURL = fmt.Sprintf("%sapikey=%s", buildURL, c.APIKey)
+	}
+
+	resp, err := http.Get(buildURL)
+	if err != nil {
+		return SearchResponse{}, fmt.Errorf("something went wrong: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return SearchResponse{}, fmt.Errorf("unexpected status: %d", resp.StatusCode)
+	}
+
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return SearchResponse{}, fmt.Errorf("failed to decode: %w", err)
+	}
+
+	return result, nil
 }
