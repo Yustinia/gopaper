@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type Client struct {
@@ -109,38 +110,27 @@ func buildBaseParams(apiKey string) url.Values {
 	return params
 }
 
+func setIfNotEmpty(v url.Values, key string, value string) {
+	if value != "" {
+		v.Set(key, value)
+	}
+}
+
 func buildParams(sp SearchParams, apiKey string) url.Values {
 	params := buildBaseParams(apiKey)
 
-	if sp.KeySearch != "" {
-		params.Set("q", sp.KeySearch)
-	}
-	if sp.Categories != "" {
-		params.Set("categories", sp.Categories)
-	}
-	if sp.Purity != "" {
-		params.Set("purity", sp.Purity)
-	}
-	if sp.Sorting != "" {
-		params.Set("sorting", sp.Sorting)
-	}
-	if sp.Order != "" {
-		params.Set("order", sp.Order)
-	}
-	if sp.AtLeast != "" {
-		params.Set("atleast", sp.AtLeast)
-	}
-	if sp.Resolution != "" {
-		params.Set("resolutions", sp.Resolution)
-	}
-	if sp.Ratios != "" {
-		params.Set("ratios", sp.Ratios)
-	}
+	setIfNotEmpty(params, "q", sp.KeySearch)
+	setIfNotEmpty(params, "categories", sp.Categories)
+	setIfNotEmpty(params, "purity", sp.Purity)
+	setIfNotEmpty(params, "sorting", sp.Sorting)
+	setIfNotEmpty(params, "order", sp.Order)
+	setIfNotEmpty(params, "atleast", sp.AtLeast)
+	setIfNotEmpty(params, "resolutions", sp.Resolution)
+	setIfNotEmpty(params, "ratios", sp.Ratios)
+	setIfNotEmpty(params, "seed", sp.Seed)
+
 	if sp.Page != 0 {
-		params.Set("page", fmt.Sprintf("%d", sp.Page))
-	}
-	if sp.Seed != "" {
-		params.Set("seed", sp.Seed)
+		params.Set("page", strconv.Itoa(sp.Page))
 	}
 
 	return params
