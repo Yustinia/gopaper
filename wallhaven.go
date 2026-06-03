@@ -13,10 +13,7 @@ func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
 func (c *Client) GetWallpaperDetails(wallID string) (WallpaperResponse, error) {
 	params := buildBaseParams(c.APIKey)
 
-	buildURL := fmt.Sprintf("%s/w/%s", c.BaseURL, wallID)
-	if c.APIKey != "" {
-		buildURL = fmt.Sprintf("%s?%s", buildURL, params.Encode())
-	}
+	buildURL := fmt.Sprintf("%s/w/%s?%s", c.BaseURL, wallID, params.Encode())
 
 	return doRequest[WallpaperResponse](buildURL)
 }
