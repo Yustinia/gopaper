@@ -29,6 +29,10 @@ func main() {
 
     // Create new search
     params := gopaper.NewSearch()
+    // Filter content to Anime
+    params.Categories = "010"
+    // Filter content rating to SFW
+    params.Purity = "100"
 
     // Configure the search parameters
     params.KeySearch = "japan"
