@@ -1,6 +1,8 @@
 package gopaper
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
 )
@@ -38,4 +40,45 @@ func buildParams(sp SearchParams, apiKey string) url.Values {
 	}
 
 	return params
+}
+
+func (m *Meta) UnmarshalJSON(data []byte) error {
+	type Alias struct {
+		CurrentPage int             `json:"current_page"`
+		LastPage    int             `json:"last_page"`
+		PerPage     json.RawMessage `json:"per_page"`
+		Total       int             `json:"total"`
+		Seed        string          `json:"seed"`
+		SearchQuery json.RawMessage `json:"query"`
+	}
+
+	var a Alias
+	if err := json.Unmarshal(data, &a); err != nil {
+		return err
+	}
+
+	m.CurrentPage = a.CurrentPage
+	m.LastPage = a.LastPage
+	m.Total = a.Total
+	m.Seed = a.Seed
+	m.SearchQuery = a.SearchQuery
+
+	var perPageInt int
+	if err := json.Unmarshal(a.PerPage, &perPageInt); err == nil {
+		m.PerPage = perPageInt
+		return nil
+	}
+
+	var perPageStr string
+	if err := json.Unmarshal(a.PerPage, &perPageStr); err != nil {
+		return fmt.Errorf("per_page: unexpected type: %w", err)
+	}
+
+	n, err := strconv.Atoi(perPageStr)
+	if err != nil {
+		return fmt.Errorf("per_page: cannot convert %q to int: %w", perPageStr, err)
+	}
+
+	m.PerPage = n
+	return nil
 }
