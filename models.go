@@ -25,9 +25,13 @@ type Wallpaper struct {
 	Purity string `json:"purity"`
 	// Category indiacates content: "general", "anime", "people"
 	Category   string `json:"category"`
+	AxisX      int    `json:"dimension_x"`
+	AxisY      int    `json:"dimension_y"`
 	Resolution string `json:"resolution"`
 	Date       string `json:"created_at"`
 	Ratio      string `json:"ratio"`
+	FileSize   int    `json:"file_size"`
+	FileType   string `json:"file_type"`
 	// Path holds the direct image path
 	Path string `json:"path"`
 
