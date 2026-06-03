@@ -58,7 +58,7 @@ func TestNSFWSearch(t *testing.T) {
 }
 
 func TestGetWallpaperDetails(t *testing.T) {
-	client := NewClient()
+	client := NewClientWithKey(APIKEY)
 	params := NewSearch()
 	params.Purity = "001"
 	params.Categories = "010"
