@@ -61,3 +61,11 @@ func (c *Client) SetPage(result SearchResponse, sp *SearchParams, page int) (Sea
 
 	return c.Search(*sp)
 }
+
+func (c *Client) GetTagDetails(tagID int) (TagResponse, error) {
+	params := buildBaseParams(c.APIKey)
+
+	buildURL := fmt.Sprintf("%s/tag/%d?%s", c.BaseURL, tagID, params.Encode())
+
+	return doRequest[TagResponse](buildURL)
+}

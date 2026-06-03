@@ -82,6 +82,10 @@ type WallpaperResponse struct {
 	Wall Wallpaper `json:"data"`
 }
 
+type TagResponse struct {
+	Tagdata Tags `json:"data"`
+}
+
 // SearchParams holds the seacrh configuration
 type SearchParams struct {
 	// KeySearch holds the query of what will be searched
