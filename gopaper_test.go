@@ -79,7 +79,7 @@ func TestGetWallpaperDetails(t *testing.T) {
 	}
 }
 
-func TestPagination(t *testing.T) {
+func TestNextPage(t *testing.T) {
 	client := NewClientWithKey(APIKEY)
 	params := NewSearch()
 	params.Purity = "001"
@@ -102,6 +102,23 @@ func TestPagination(t *testing.T) {
 	if result.Metadata.CurrentPage != params.Page {
 		t.Errorf("expected %v, got %v", params.Page, result.Metadata.CurrentPage)
 	}
+}
+
+func TestPrevPage(t *testing.T) {
+	client := NewClientWithKey(APIKEY)
+	params := NewSearch()
+	params.Purity = "001"
+	params.Categories = "010"
+	params.Page = 5
+
+	result, err := client.Search(params)
+	if err != nil {
+		t.Fatalf("expected no error, got: %v", err)
+	}
+
+	if result.Metadata.CurrentPage != params.Page {
+		t.Errorf("expected the same page, got different page")
+	}
 
 	result, err = client.PrevPage(result, &params)
 	if err != nil {
@@ -109,6 +126,22 @@ func TestPagination(t *testing.T) {
 	}
 	if result.Metadata.CurrentPage != params.Page {
 		t.Errorf("expected %v, got %v", params.Page, result.Metadata.CurrentPage)
+	}
+}
+func TestSetPage(t *testing.T) {
+	client := NewClientWithKey(APIKEY)
+	params := NewSearch()
+	params.Purity = "001"
+	params.Categories = "010"
+	params.Page = 5
+
+	result, err := client.Search(params)
+	if err != nil {
+		t.Fatalf("expected no error, got: %v", err)
+	}
+
+	if result.Metadata.CurrentPage != params.Page {
+		t.Errorf("expected the same page, got different page")
 	}
 
 	result, err = client.SetPage(result, &params, 12)
