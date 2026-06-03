@@ -13,19 +13,40 @@ go get github.com/Yustinia/gopaper
 Quickstart:
 
 ```go
+package main
+
+import (
+    "fmt"
+    "github.com/Yustinia/gopaper"
+)
+
 func main() {
-    client := gopaper.NewClient("APIKey")
+    // Create a client without API Key
+    client := gopaper.NewClient()
+
+    // Use this if you have a valid API key
+    // client := gopaper.NewClientWithKey("APIKey")
+
+    // Create new search
     params := gopaper.NewSearch()
+
+    // Configure the search parameters
     params.KeySearch = "japan"
 
+    // Perform the search and provide
     result, err := client.Search(params)
     if err != nil {
         panic(err)
     }
 
-    for i, wall := range result.Wal {
+    for i, wall := range result.Wallpapers {
         fmt.Printf("[%d] %s\n", i, wall.Path)
     }
+
+    // Get full details for a specific wallpaper from the result
+    details, err := client.GetWallpaperDetails(result.Wallpapers[0].ID)
+    // or by providing the ID as the argument
+    // details, err := client.GetWallpaperDetails("poyzl3")
 }
 ```
 
