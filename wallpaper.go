@@ -70,3 +70,33 @@ func (w Wallpaper) TagNames() []string {
 
 	return tagNames
 }
+
+// Returns pixel count at the X axis
+func (w Wallpaper) WallXAxis() int {
+	return w.AxisX
+}
+
+// Returns pixel count at the Y axis
+func (w Wallpaper) WallYAxis() int {
+	return w.AxisY
+}
+
+// Return file size in bytes
+func (w Wallpaper) SizeByte() int {
+	return w.FileSize
+}
+
+// Return file size in MiB
+func (w Wallpaper) SizeMiB() float64 {
+	return float64(w.FileSize) / 1024 / 1024
+}
+
+// Return file size in KiB
+func (w Wallpaper) SizeKiB() float64 {
+	return float64(w.FileSize) / 1024
+}
+
+// Return file type
+func (w Wallpaper) WallFileType() string {
+	return w.FileType
+}
