@@ -57,8 +57,8 @@ type Query struct {
 }
 
 type SearchResponse struct {
-	Metadata Meta        `json:"meta"`
-	Wall     []Wallpaper `json:"data"`
+	Metadata   Meta        `json:"meta"`
+	Wallpapers []Wallpaper `json:"data"`
 }
 
 type WallpaperResponse struct {
