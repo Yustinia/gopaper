@@ -1,6 +1,13 @@
 package gopaper
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var ErrLastPage = errors.New("already on the last page")
+var ErrFirstPage = errors.New("already on first page")
+var ErrInvalidPage = errors.New("not a valid page")
 
 func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
 	params := buildParams(sp, c.APIKey)
@@ -16,4 +23,36 @@ func (c *Client) GetWallpaperDetails(wallID string) (WallpaperResponse, error) {
 	buildURL := fmt.Sprintf("%s/w/%s?%s", c.BaseURL, wallID, params.Encode())
 
 	return doRequest[WallpaperResponse](buildURL)
+}
+
+func (c *Client) NextPage(result SearchResponse, sp *SearchParams) (SearchResponse, error) {
+	if result.Metadata.CurrentPage >= result.Metadata.LastPage {
+		return SearchResponse{}, ErrLastPage
+	}
+
+	sp.Page++
+
+	return c.Search(*sp)
+}
+
+func (c *Client) PrevPage(result SearchResponse, sp *SearchParams) (SearchResponse, error) {
+	if result.Metadata.CurrentPage <= 1 {
+		return SearchResponse{}, ErrFirstPage
+	}
+
+	sp.Page--
+
+	return c.Search(*sp)
+}
+
+func (c *Client) SetPage(result SearchResponse, sp *SearchParams, page int) (SearchResponse, error) {
+	if page > result.Metadata.LastPage {
+		return SearchResponse{}, ErrLastPage
+	} else if page < 1 {
+		return SearchResponse{}, ErrFirstPage
+	}
+
+	sp.Page = page
+
+	return c.Search(*sp)
 }
