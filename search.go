@@ -1,5 +1,6 @@
 package gopaper
 
+// NewSearch initializes the default search parameters
 func NewSearch() SearchParams {
 	return SearchParams{
 		Purity:     "100",
