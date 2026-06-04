@@ -161,11 +161,11 @@ func TestTagLookup(t *testing.T) {
 		t.Fatalf("expected no error, got: %v", err)
 	}
 
-	t.Logf("ID: %v", result.Tagdata.ID)
-	t.Logf("Name: %v", result.Tagdata.Name)
-	t.Logf("Alias: %v", result.Tagdata.Alias)
-	t.Logf("CategoryID: %v", result.Tagdata.CategoryID)
-	t.Logf("Category%v", result.Tagdata.Category)
-	t.Logf("Purity: %v", result.Tagdata.Purity)
-	t.Logf("Date: %v", result.Tagdata.Date)
+	t.Logf("ID: %v", result.Tagdata.TagID())
+	t.Logf("Name: %v", result.Tagdata.TagName())
+	t.Logf("Alias: %v", result.Tagdata.TagAlias())
+	t.Logf("CategoryID: %v", result.Tagdata.TagCategoryID())
+	t.Logf("Category%v", result.Tagdata.TagCategory())
+	t.Logf("Purity: %v", result.Tagdata.TagPurity())
+	t.Logf("Date: %v", result.Tagdata.TagDate())
 }
