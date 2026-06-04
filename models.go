@@ -58,17 +58,11 @@ type Tags struct {
 
 // Meta holds pagindation data
 type Meta struct {
-	CurrentPage int             `json:"current_page"`
-	LastPage    int             `json:"last_page"`
-	PerPage     int             `json:"per_page"`
-	Total       int             `json:"total"`
-	Seed        string          `json:"seed"`
-	SearchQuery json.RawMessage `json:"query"`
-}
-
-type Query struct {
-	ID  int    `json:"id"`
-	Tag string `json:"tag"`
+	CurrentPage int    `json:"current_page"`
+	LastPage    int    `json:"last_page"`
+	PerPage     int    `json:"per_page"`
+	Total       int    `json:"total"`
+	Seed        string `json:"seed"`
 }
 
 // SearchResponse holds Meta and Wallpaper slices
@@ -127,7 +121,6 @@ func (m *Meta) UnmarshalJSON(data []byte) error {
 		PerPage     json.RawMessage `json:"per_page"`
 		Total       int             `json:"total"`
 		Seed        string          `json:"seed"`
-		SearchQuery json.RawMessage `json:"query"`
 	}
 
 	var a Alias
@@ -139,7 +132,6 @@ func (m *Meta) UnmarshalJSON(data []byte) error {
 	m.LastPage = a.LastPage
 	m.Total = a.Total
 	m.Seed = a.Seed
-	m.SearchQuery = a.SearchQuery
 
 	var perPageInt int
 	if err := json.Unmarshal(a.PerPage, &perPageInt); err == nil {
