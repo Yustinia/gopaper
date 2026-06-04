@@ -69,3 +69,27 @@ func (c *Client) GetTagDetails(tagID int) (TagResponse, error) {
 
 	return doRequest[TagResponse](buildURL)
 }
+
+func (c *Client) GetSettings() (SettingsResponse, error) {
+	if c.APIKey == "" {
+		return SettingsResponse{}, errors.New("API required for reading settings")
+	}
+
+	params := buildBaseParams(c.APIKey)
+
+	buildURL := fmt.Sprintf("%s/settings?%s", c.BaseURL, params.Encode())
+
+	return doRequest[SettingsResponse](buildURL)
+}
+
+func (c *Client) GetCollections() (CollectionResponse, error) {
+	if c.APIKey == "" {
+		return CollectionResponse{}, errors.New("API required for retrieving collections")
+	}
+
+	params := buildBaseParams(c.APIKey)
+
+	buildURL := fmt.Sprintf("%s/collections?%s", c.BaseURL, params.Encode())
+
+	return doRequest[CollectionResponse](buildURL)
+}
