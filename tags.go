@@ -1,8 +1,8 @@
 package gopaper
 
 // Return tag ID
-func (t Tags) TagID() string {
-	return t.TagID()
+func (t Tags) TagID() int {
+	return t.ID
 }
 
 // Return tag name
