@@ -1,6 +1,7 @@
 package gopaper
 
 import (
+	"encoding/json"
 	"os"
 	"testing"
 )
@@ -161,13 +162,7 @@ func TestTagLookup(t *testing.T) {
 		t.Fatalf("expected no error, got: %v", err)
 	}
 
-	t.Logf("ID: %v", result.Tagdata.TagID())
-	t.Logf("Name: %v", result.Tagdata.TagName())
-	t.Logf("Alias: %v", result.Tagdata.TagAlias())
-	t.Logf("CategoryID: %v", result.Tagdata.TagCategoryID())
-	t.Logf("Category%v", result.Tagdata.TagCategory())
-	t.Logf("Purity: %v", result.Tagdata.TagPurity())
-	t.Logf("Date: %v", result.Tagdata.TagDate())
+	logPretty(t, result.Tagdata)
 }
 
 func TestUserSettings(t *testing.T) {
@@ -178,7 +173,7 @@ func TestUserSettings(t *testing.T) {
 		t.Fatalf("expected no errors, got: %v", err)
 	}
 
-	t.Logf("%+v", result)
+	logPretty(t, result.UserSettings)
 }
 
 func TestCollections(t *testing.T) {
@@ -189,5 +184,14 @@ func TestCollections(t *testing.T) {
 		t.Fatalf("expected no errors, got: %v", err)
 	}
 
-	t.Logf("%+v", result)
+	logPretty(t, result.UserCollections)
+}
+
+func logPretty(t *testing.T, v any) {
+	pretty, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		t.Fatalf("failed to pretty indent: %v", err)
+	}
+
+	t.Logf("\n%s", pretty)
 }
