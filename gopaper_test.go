@@ -169,3 +169,25 @@ func TestTagLookup(t *testing.T) {
 	t.Logf("Purity: %v", result.Tagdata.TagPurity())
 	t.Logf("Date: %v", result.Tagdata.TagDate())
 }
+
+func TestUserSettings(t *testing.T) {
+	client := NewClientWithKey(APIKEY)
+
+	result, err := client.GetSettings()
+	if err != nil {
+		t.Fatalf("expected no errors, got: %v", err)
+	}
+
+	t.Logf("%+v", result)
+}
+
+func TestCollections(t *testing.T) {
+	client := NewClientWithKey(APIKEY)
+
+	result, err := client.GetCollections()
+	if err != nil {
+		t.Fatalf("expected no errors, got: %v", err)
+	}
+
+	t.Logf("%+v", result)
+}
