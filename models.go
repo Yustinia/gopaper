@@ -82,6 +82,11 @@ type WallpaperResponse struct {
 	Wall Wallpaper `json:"data"`
 }
 
+// TagResponse holds data when looking up tag IDs
+type TagResponse struct {
+	Tagdata Tags `json:"data"`
+}
+
 // SearchParams holds the seacrh configuration
 type SearchParams struct {
 	// KeySearch holds the query of what will be searched
@@ -93,7 +98,7 @@ type SearchParams struct {
 	// Purity filters the search to "sfw", "sketchy", and "nsfw" as indicated by: "100", "010", "001"
 	Purity string
 
-	// Sorting: date_added, relevance, random, views, favorites, toplist
+	// Sorting: "date_added", "relevance", "random", "views", "favorites", "toplist"
 	Sorting string
 
 	// Order sorts by "desc" or "asc"

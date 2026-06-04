@@ -152,3 +152,20 @@ func TestSetPage(t *testing.T) {
 		t.Errorf("expected to page %v, got %v", params.Page, result.Metadata.CurrentPage)
 	}
 }
+
+func TestTagLookup(t *testing.T) {
+	client := NewClient()
+
+	result, err := client.GetTagDetails(344)
+	if err != nil {
+		t.Fatalf("expected no error, got: %v", err)
+	}
+
+	t.Logf("ID: %v", result.Tagdata.ID)
+	t.Logf("Name: %v", result.Tagdata.Name)
+	t.Logf("Alias: %v", result.Tagdata.Alias)
+	t.Logf("CategoryID: %v", result.Tagdata.CategoryID)
+	t.Logf("Category%v", result.Tagdata.Category)
+	t.Logf("Purity: %v", result.Tagdata.Purity)
+	t.Logf("Date: %v", result.Tagdata.Date)
+}
