@@ -14,6 +14,8 @@ func TestNewClient(t *testing.T) {
 	if client.BaseURL == "" {
 		t.Error("expected baseURL set, got empty string")
 	}
+
+	logPretty(t, client)
 }
 
 func TestNewClientKey(t *testing.T) {
@@ -22,6 +24,8 @@ func TestNewClientKey(t *testing.T) {
 	if client.APIKey != APIKEY {
 		t.Errorf("different key got, client: %s key: %s", client.APIKey, APIKEY)
 	}
+
+	logPretty(t, client)
 }
 
 func TestSFWSearch(t *testing.T) {
@@ -78,6 +82,8 @@ func TestGetWallpaperDetails(t *testing.T) {
 	if details.Wall.ID != result.Wallpapers[0].ID {
 		t.Errorf("expected %s, got %s", details.Wall.ID, result.Wallpapers[0].ID)
 	}
+
+	logPretty(t, details.Wall)
 }
 
 func TestNextPage(t *testing.T) {
@@ -96,6 +102,8 @@ func TestNextPage(t *testing.T) {
 		t.Errorf("expected the same page, got different page")
 	}
 
+	logPretty(t, result.Metadata)
+
 	result, err = client.NextPage(result, &params)
 	if err != nil {
 		t.Fatalf("expected to page next, got: %v", err)
@@ -103,6 +111,8 @@ func TestNextPage(t *testing.T) {
 	if result.Metadata.CurrentPage != params.Page {
 		t.Errorf("expected %v, got %v", params.Page, result.Metadata.CurrentPage)
 	}
+
+	logPretty(t, result.Metadata)
 }
 
 func TestPrevPage(t *testing.T) {
@@ -121,6 +131,8 @@ func TestPrevPage(t *testing.T) {
 		t.Errorf("expected the same page, got different page")
 	}
 
+	logPretty(t, result.Metadata)
+
 	result, err = client.PrevPage(result, &params)
 	if err != nil {
 		t.Fatalf("expected to page previous, got: %v", err)
@@ -128,6 +140,8 @@ func TestPrevPage(t *testing.T) {
 	if result.Metadata.CurrentPage != params.Page {
 		t.Errorf("expected %v, got %v", params.Page, result.Metadata.CurrentPage)
 	}
+
+	logPretty(t, result.Metadata)
 }
 func TestSetPage(t *testing.T) {
 	client := NewClientWithKey(APIKEY)
@@ -145,6 +159,8 @@ func TestSetPage(t *testing.T) {
 		t.Errorf("expected the same page, got different page")
 	}
 
+	logPretty(t, result.Metadata)
+
 	result, err = client.SetPage(result, &params, 12)
 	if err != nil {
 		t.Fatalf("expected to fetch page, got: %v", err)
@@ -152,6 +168,8 @@ func TestSetPage(t *testing.T) {
 	if result.Metadata.CurrentPage != params.Page {
 		t.Errorf("expected to page %v, got %v", params.Page, result.Metadata.CurrentPage)
 	}
+
+	logPretty(t, result.Metadata)
 }
 
 func TestTagLookup(t *testing.T) {
