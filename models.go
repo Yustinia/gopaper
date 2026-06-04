@@ -81,6 +81,38 @@ type TagResponse struct {
 	Tagdata Tags `json:"data"`
 }
 
+// SettingsResponse holds user settings data
+type SettingsResponse struct {
+	UserSettings Settings `json:"data"`
+}
+
+// Settings holds field data
+type Settings struct {
+	ThumbSize     string   `json:"thumb_size"`
+	PerPage       string   `json:"per_page"`
+	Purity        []string `json:"purity"`
+	Categories    []string `json:"categories"`
+	Resolutions   []string `json:"resolutions"`
+	Ratios        []string `json:"aspect_ratios"`
+	ToplistRange  string   `json:"toplist_range"`
+	TagBlacklist  []string `json:"tag_blacklist"`
+	UserBlacklist []string `json:"user_blacklist"`
+}
+
+// CollectionResponse holds wallpaper collections
+type CollectionResponse struct {
+	UserCollections []Collections `json:"data"`
+}
+
+// Collections holds per collection data
+type Collections struct {
+	ID     int    `json:"id"`
+	Label  string `json:"label"`
+	Views  int    `json:"views"`
+	Public int    `json:"public"`
+	Count  int    `json:"count"`
+}
+
 // SearchParams holds the seacrh configuration
 type SearchParams struct {
 	// KeySearch holds the query of what will be searched
