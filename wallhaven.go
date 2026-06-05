@@ -65,6 +65,7 @@ func (c *Client) SetPage(result SearchResponse, sp *SearchParams, page int) (Sea
 	return c.Search(*sp)
 }
 
+// GetTagDetails retrieves details of a tag based on the tag ID
 func (c *Client) GetTagDetails(tagID int) (TagResponse, error) {
 	params := buildBaseParams(c.APIKey)
 
@@ -73,6 +74,7 @@ func (c *Client) GetTagDetails(tagID int) (TagResponse, error) {
 	return doRequest[TagResponse](buildURL)
 }
 
+// GetSettings retrieves user settings data
 func (c *Client) GetSettings() (SettingsResponse, error) {
 	if c.APIKey == "" {
 		return SettingsResponse{}, ErrAPISettings
@@ -85,6 +87,7 @@ func (c *Client) GetSettings() (SettingsResponse, error) {
 	return doRequest[SettingsResponse](buildURL)
 }
 
+// GetCollections retrieves user collection data
 func (c *Client) GetCollections() (CollectionResponse, error) {
 	if c.APIKey == "" {
 		return CollectionResponse{}, ErrAPICollections
