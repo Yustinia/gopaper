@@ -12,6 +12,9 @@ var ErrInvalidPage = errors.New("not a valid page")
 var ErrAPISettings = errors.New("API required for reading settings")
 var ErrAPICollections = errors.New("API required for retreiving collections")
 
+var ErrInvalidPageRange = errors.New("invalid page range")
+var ErrInvalidWallCount = errors.New("invalid wallpaper fetch count")
+
 // Search performs the search based on provided search parameters
 func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
 	params := buildParams(sp, c.APIKey)
@@ -63,6 +66,63 @@ func (c *Client) SetPage(result SearchResponse, sp *SearchParams, page int) (Sea
 	sp.Page = page
 
 	return c.Search(*sp)
+}
+
+// FetchPages returns multiple wallpaper results based on the page range set on fromPage to toPage
+func (c *Client) FetchPages(sp *SearchParams, fromPage int, toPage int) ([]Wallpaper, error) {
+	var fetchedWalls []Wallpaper
+
+	if fromPage > toPage {
+		return fetchedWalls, ErrInvalidPageRange
+	}
+
+	for i := fromPage; i <= toPage; i++ {
+		sp.Page = i
+		result, err := c.Search(*sp)
+		if err != nil {
+			return fetchedWalls, err
+		}
+
+		fetchedWalls = append(fetchedWalls, result.Wallpapers...)
+	}
+
+	return fetchedWalls, nil
+}
+
+// FetchWallpaperCount returns wallpaper items depending on the wallCount
+func (c *Client) FetchWallpaperCount(sp *SearchParams, wallCount int) ([]Wallpaper, error) {
+	var fetchedWalls []Wallpaper
+
+	if wallCount <= 0 {
+		return fetchedWalls, ErrInvalidWallCount
+	}
+
+	result, err := c.Search(*sp)
+	if err != nil {
+		return fetchedWalls, err
+	}
+	maxWallCount := result.Metadata.Total
+	fetchedWalls = append(fetchedWalls, result.Wallpapers...)
+	sp.Page++
+
+	for {
+		result, err = c.Search(*sp)
+		if err != nil {
+			return fetchedWalls, err
+		}
+
+		fetchedWalls = append(fetchedWalls, result.Wallpapers...)
+		sp.Page++
+
+		if len(fetchedWalls) >= wallCount || len(fetchedWalls) >= maxWallCount {
+			break
+		}
+	}
+	if len(fetchedWalls) > wallCount {
+		fetchedWalls = fetchedWalls[:wallCount]
+	}
+
+	return fetchedWalls, nil
 }
 
 // GetTagDetails retrieves details of a tag based on the tag ID
