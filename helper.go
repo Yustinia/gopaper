@@ -28,6 +28,7 @@ func buildParams(sp SearchParams, apiKey string) url.Values {
 	setIfNotEmpty(params, "purity", sp.Purity)
 	setIfNotEmpty(params, "sorting", sp.Sorting)
 	setIfNotEmpty(params, "order", sp.Order)
+	setIfNotEmpty(params, "topRange", sp.TopRange)
 	setIfNotEmpty(params, "atleast", sp.AtLeast)
 	setIfNotEmpty(params, "resolutions", sp.Resolution)
 	setIfNotEmpty(params, "ratios", sp.Ratios)
