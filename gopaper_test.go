@@ -243,6 +243,26 @@ func TestPageFetching(t *testing.T) {
 	t.Logf("Wallpaper count is: %d", len(result))
 }
 
+func TestWallpaperCountFetch(t *testing.T) {
+	client := NewClientWithKey(APIKEY)
+	params := NewSearch()
+	params.Purity = "111"
+	params.Categories = "010"
+	params.Sorting = "random"
+	params.Seed = "h232d"
+
+	result, err := client.FetchWallpaperCount(&params, 18)
+	if err != nil {
+		t.Fatalf("expected no errors, got: %v", err)
+	}
+
+	for i, wall := range result {
+		t.Logf("[%d] %s", i, wall.Path)
+	}
+
+	t.Logf("Wallpaper count is: %d", len(result))
+}
+
 func logPretty(t *testing.T, v any) {
 	pretty, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
