@@ -62,6 +62,24 @@ func TestNSFWSearch(t *testing.T) {
 	}
 }
 
+func TestTopRange(t *testing.T) {
+	client := NewClientWithKey(APIKEY)
+	params := NewSearch()
+	params.TopRange = "1y"
+	params.Sorting = "toplist"
+	params.Order = "desc"
+	params.Purity = "111"
+	params.Categories = "010"
+
+	result, err := client.Search(params)
+	if err != nil {
+		t.Fatalf("expected no errors, got: %v", err)
+	}
+
+	for _, wall := range result.Wallpapers {
+		t.Log(wall.Path)
+	}
+}
 func TestGetWallpaperDetails(t *testing.T) {
 	client := NewClientWithKey(APIKEY)
 	params := NewSearch()

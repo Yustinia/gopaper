@@ -130,6 +130,9 @@ type SearchParams struct {
 	// Order sorts by "desc" or "asc"
 	Order string
 
+	// TopRange filters updated wallpapers in a certain amount of time: "1d", "3d", "1w", "1M", "3M", "6M", "1y"
+	TopRange string
+
 	// AtLeast defines the minimum resolution allowed for the search: "1920x1080"
 	AtLeast string
 
