@@ -12,6 +12,8 @@ var ErrInvalidPage = errors.New("not a valid page")
 var ErrAPISettings = errors.New("API required for reading settings")
 var ErrAPICollections = errors.New("API required for retreiving collections")
 
+var ErrInvalidPageRange = errors.New("invalid page range")
+
 // Search performs the search based on provided search parameters
 func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
 	params := buildParams(sp, c.APIKey)
@@ -63,6 +65,26 @@ func (c *Client) SetPage(result SearchResponse, sp *SearchParams, page int) (Sea
 	sp.Page = page
 
 	return c.Search(*sp)
+}
+
+func (c *Client) FetchPages(sp *SearchParams, fromPage int, toPage int) ([]Wallpaper, error) {
+	if fromPage > toPage {
+		return []Wallpaper{}, ErrInvalidPageRange
+	}
+
+	var fetchedWalls []Wallpaper
+
+	for i := fromPage; i <= toPage; i++ {
+		sp.Page = i
+		result, err := c.Search(*sp)
+		if err != nil {
+			return fetchedWalls, err
+		}
+
+		fetchedWalls = append(fetchedWalls, result.Wallpapers...)
+	}
+
+	return fetchedWalls, nil
 }
 
 // GetTagDetails retrieves details of a tag based on the tag ID
