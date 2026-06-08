@@ -76,8 +76,22 @@ func (c *Client) FetchPages(sp *SearchParams, fromPage int, toPage int) ([]Wallp
 		return fetchedWalls, ErrInvalidPageRange
 	}
 
-	for i := fromPage; i <= toPage; i++ {
+	sp.Page = fromPage
+	result, err := c.Search(*sp)
+	if err != nil {
+		return fetchedWalls, err
+	}
+
+	if toPage > result.Metadata.LastPage {
+		toPage = result.Metadata.LastPage
+	}
+
+	fetchedWalls = append(fetchedWalls, result.Wallpapers...)
+	sp.Page++
+
+	for i := fromPage + 1; i <= toPage; i++ {
 		sp.Page = i
+
 		result, err := c.Search(*sp)
 		if err != nil {
 			return fetchedWalls, err
