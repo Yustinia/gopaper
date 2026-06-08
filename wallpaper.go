@@ -1,61 +1,61 @@
 package gopaper
 
-// Return the small thumbnail path
+// Return the path of the small thumbnail
 func (w Wallpaper) ThumbSmall() string {
 	return w.Thumbnails.Small
 }
 
-// Returns the large thumbnail path
+// Returns the path of the large thumbnail
 func (w Wallpaper) ThumbLarge() string {
 	return w.Thumbnails.Large
 }
 
-// Returns the original thumbnail path
+// Returns the original size of the thumbnail
 func (w Wallpaper) ThumbOrig() string {
 	return w.Thumbnails.Orig
 }
 
-// Returns full wallhaven link
+// Returns the full wallhaven link
 func (w Wallpaper) WallURL() string {
 	return w.URL
 }
 
-// Returns shortened wallhaven link
+// Returns the shortened wallhaven link
 func (w Wallpaper) WallShortURL() string {
 	return w.ShortURL
 }
 
-// Returns direct image URL of wallpaper
+// Returns a direct image URL
 func (w Wallpaper) ImageURL() string {
 	return w.Path
 }
 
-// IsSFW checks if wallpaper is SFW
+// IsSFW checks if wallpaper content rating is SFW
 func (w Wallpaper) IsSFW() bool {
 	return w.Purity == "sfw"
 }
 
-// IsSketchy checks if wallpaper is Sketchy
+// IsSketchy checks if wallpaper content rating is Sketchy
 func (w Wallpaper) IsSketchy() bool {
 	return w.Purity == "sketchy"
 }
 
-// IsNSFW checks if wallpaper is NSFW
+// IsNSFW checks if wallpaper content rating is NSFW
 func (w Wallpaper) IsNSFW() bool {
 	return w.Purity == "nsfw"
 }
 
-// IsGeneral checks if wallpaper is General
+// IsGeneral checks if wallpaper category rating is General
 func (w Wallpaper) IsGeneral() bool {
 	return w.Category == "general"
 }
 
-// IsAnime checks if wallpaper is Anime
+// IsAnime checks if wallpaper category is Anime
 func (w Wallpaper) IsAnime() bool {
 	return w.Category == "anime"
 }
 
-// IsPeople checks if wallpaper is People
+// IsPeople checks if wallpaper category is People
 func (w Wallpaper) IsPeople() bool {
 	return w.Category == "people"
 }
@@ -96,7 +96,7 @@ func (w Wallpaper) SizeKiB() float64 {
 	return float64(w.FileSize) / 1024
 }
 
-// Return file type
+// Return file type in "image/type"
 func (w Wallpaper) WallFileType() string {
 	return w.FileType
 }

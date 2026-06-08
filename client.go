@@ -5,12 +5,13 @@ type Client struct {
 	BaseURL string
 }
 
-// NewClient creates a new unauthorized client
+// NewClient returns a client for unauthenticated API requests
 func NewClient() Client {
 	return Client{BaseURL: "https://wallhaven.cc/api/v1"}
 }
 
-// NewClientWithKey creates a new authorized client
+// NewClientWithKey returns a client authenticated with the given API key
+// Endpoints like fetching NSFW tagged wallpapers require authentication
 func NewClientWithKey(apiKey string) Client {
 	return Client{APIKey: apiKey, BaseURL: "https://wallhaven.cc/api/v1"}
 }

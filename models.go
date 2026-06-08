@@ -6,32 +6,44 @@ import (
 	"strconv"
 )
 
-// Thumbs holds the thumbnail paths of the wallpaper
+// Thumbs contain thumbnail URLs of a wallpaper
 type Thumbs struct {
 	Large string `json:"large"`
 	Orig  string `json:"original"`
 	Small string `json:"small"`
 }
 
-// Wallpaper holds the data of a wallpaper
+// Wallpaper represents a single wallpaper from the API
 type Wallpaper struct {
 	Thumbnails Thumbs `json:"thumbs"`
-	ID         string `json:"id"`
-	URL        string `json:"url"`
-	ShortURL   string `json:"short_url"`
-	Views      int    `json:"views"`
-	Favorites  int    `json:"favorites"`
-	// Purity indicates content rating: "sfw", "sketchy", "nsfw"
+	// ID contains the uniquely assigned ID for the wallpaper
+	ID string `json:"id"`
+	// URL contains the full wallhaven URL
+	URL string `json:"url"`
+	// ShortURL contains the shortened wallhaven URL
+	ShortURL string `json:"short_url"`
+	// Views is the number of times a wallpaper has ben seen
+	Views int `json:"views"`
+	// Favorites is the number of users that has favorited a wallpaper
+	Favorites int `json:"favorites"`
+	// Purity indicates rating: "sfw", "sketchy", "nsfw"
 	Purity string `json:"purity"`
-	// Category indiacates content: "general", "anime", "people"
-	Category   string `json:"category"`
-	AxisX      int    `json:"dimension_x"`
-	AxisY      int    `json:"dimension_y"`
+	// Category indicates content: "general", "anime", "people"
+	Category string `json:"category"`
+	// AxisX contains the width pixel count
+	AxisX int `json:"dimension_x"`
+	// AxisY contains the height pixel count
+	AxisY int `json:"dimension_y"`
+	// Resolution contains the WIDTH x HEIGHT pixel count
 	Resolution string `json:"resolution"`
-	Date       string `json:"created_at"`
-	Ratio      string `json:"ratio"`
-	FileSize   int    `json:"file_size"`
-	FileType   string `json:"file_type"`
+	// Date indicates when the wallpaper is was uploaded
+	Date string `json:"created_at"`
+	// Ratio is the wallpaper's aspect ratio
+	Ratio string `json:"ratio"`
+	// FileSize is how large the file is in Bytes
+	FileSize int `json:"file_size"`
+	// FileType is the format the wallpaper
+	FileType string `json:"file_type"`
 	// Path holds the direct image path
 	Path string `json:"path"`
 
@@ -39,30 +51,45 @@ type Wallpaper struct {
 	WallpaperTags     []Tags   `json:"tags"`
 }
 
-// Uploader holds the user to uploads the wallpaper
+// Uploader contains information who uploaded the wallpaper
 type Uploader struct {
+	// Username is the name of the uploader
 	Username string `json:"username"`
-	Group    string `json:"group"`
+	// Group is where the uploader is a part of
+	Group string `json:"group"`
 }
 
-// Tags holds the tags assigned to the wallpaper
+// Tags represent a tag assigned to a wallpaper.
 type Tags struct {
-	ID         int    `json:"id"`
-	Name       string `json:"name"`
-	Alias      string `json:"alias"`
-	CategoryID int    `json:"category_id"`
-	Category   string `json:"category"`
-	Purity     string `json:"purity"`
-	Date       string `json:"created_at"`
+	// ID is the unique tag identifier.
+	ID int `json:"id"`
+	// Name is the display name of the tag.
+	Name string `json:"name"`
+	// Alias is an alternative name or shorthand for the tag, if any.
+	Alias string `json:"alias"`
+	// CategoryID is the identifier of the tag's parent category.
+	CategoryID int `json:"category_id"`
+	// Category is the human-readable name of the parent category.
+	Category string `json:"category"`
+	// Purity is the content rating associated with this tag: "sfw", "sketchy", or "nsfw".
+	Purity string `json:"purity"`
+	// Date is the RFC3339 timestamp when the tag was created.
+	Date string `json:"created_at"`
 }
 
-// Meta holds pagindation data
+// Meta contains pagination metadata for search results.
 type Meta struct {
-	CurrentPage int    `json:"current_page"`
-	LastPage    int    `json:"last_page"`
-	PerPage     int    `json:"per_page"`
-	Total       int    `json:"total"`
-	Seed        string `json:"seed"`
+	// CurrentPage is the page number returned in this response.
+	CurrentPage int `json:"current_page"`
+	// LastPage is the final available page for this query.
+	LastPage int `json:"last_page"`
+	// PerPage is the number of results returned per page.
+	PerPage int `json:"per_page"`
+	// Total is the total number of results matching the query.
+	Total int `json:"total"`
+	// Seed is the randomization seed used for "random" sorting.
+	// Reuse this seed to retrieve the same result set again.
+	Seed string `json:"seed"`
 }
 
 // SearchResponse holds Meta and Wallpaper slices
@@ -86,16 +113,25 @@ type SettingsResponse struct {
 	UserSettings Settings `json:"data"`
 }
 
-// Settings holds field data
+// Settings represents a user's Wallhaven account preferences.
 type Settings struct {
-	ThumbSize     string   `json:"thumb_size"`
-	PerPage       string   `json:"per_page"`
-	Purity        []string `json:"purity"`
-	Categories    []string `json:"categories"`
-	Resolutions   []string `json:"resolutions"`
-	Ratios        []string `json:"aspect_ratios"`
-	ToplistRange  string   `json:"toplist_range"`
-	TagBlacklist  []string `json:"tag_blacklist"`
+	// ThumbSize is the preferred thumbnail resolution (e.g., "small", "large").
+	ThumbSize string `json:"thumb_size"`
+	// PerPage is the number of wallpapers to display per page.
+	PerPage string `json:"per_page"`
+	// Purity is the list of enabled content ratings (e.g., ["sfw", "sketchy"]).
+	Purity []string `json:"purity"`
+	// Categories is the list of enabled content categories (e.g., ["general", "anime"]).
+	Categories []string `json:"categories"`
+	// Resolutions is the list of allowed wallpaper resolutions.
+	Resolutions []string `json:"resolutions"`
+	// Ratios is the list of preferred aspect ratios.
+	Ratios []string `json:"aspect_ratios"`
+	// ToplistRange is the time period for toplist results (e.g., "1d", "1w", "1M", "1y").
+	ToplistRange string `json:"toplist_range"`
+	// TagBlacklist is the list of tags to exclude from search results.
+	TagBlacklist []string `json:"tag_blacklist"`
+	// UserBlacklist is the list of uploaders whose wallpapers are hidden.
 	UserBlacklist []string `json:"user_blacklist"`
 }
 
@@ -104,48 +140,62 @@ type CollectionResponse struct {
 	UserCollections []Collections `json:"data"`
 }
 
-// Collections holds per collection data
+// Collections represents a user's wallpaper collection.
 type Collections struct {
-	ID     int    `json:"id"`
-	Label  string `json:"label"`
-	Views  int    `json:"views"`
-	Public int    `json:"public"`
-	Count  int    `json:"count"`
+	// ID is the unique collection identifier.
+	ID int `json:"id"`
+	// Label is the collection's display name.
+	Label string `json:"label"`
+	// Views is the number of times the collection has been viewed.
+	Views int `json:"views"`
+	// Public indicates whether the collection is publicly visible (1) or private (0).
+	Public int `json:"public"`
+	// Count is the number of wallpapers in the collection.
+	Count int `json:"count"`
 }
 
-// SearchParams holds the seacrh configuration
+// SearchParams configures a wallpaper search query.
 type SearchParams struct {
-	// KeySearch holds the query of what will be searched
+	// KeySearch is the search keyword or phrase.
 	KeySearch string
 
-	// Categories filters the search to "general", "anime", and "people" as indicated by: "100", "010", "001"
+	// Categories filters by content type using a 3-bit string:
+	// "100" = general, "010" = anime, "001" = people.
+	// Combine with "1" for enabled (e.g., "111" for all).
 	Categories string
 
-	// Purity filters the search to "sfw", "sketchy", and "nsfw" as indicated by: "100", "010", "001"
+	// Purity filters by content rating using a 3-bit string:
+	// "100" = sfw, "010" = sketchy, "001" = nsfw.
+	// Combine with "1" for enabled (e.g., "110" for sfw + sketchy).
 	Purity string
 
-	// Sorting: "date_added", "relevance", "random", "views", "favorites", "toplist"
+	// Sorting determines result order: "date_added", "relevance", "random",
+	// "views", "favorites", or "toplist".
 	Sorting string
 
-	// Order sorts by "desc" or "asc"
+	// Order is the sort direction: "desc" or "asc".
 	Order string
 
-	// TopRange filters updated wallpapers in a certain amount of time: "1d", "3d", "1w", "1M", "3M", "6M", "1y"
+	// TopRange filters results to a time window when Sorting is "toplist":
+	// "1d", "3d", "1w", "1M", "3M", "6M", "1y".
 	TopRange string
 
-	// AtLeast defines the minimum resolution allowed for the search: "1920x1080"
+	// AtLeast is the minimum resolution (e.g., "1920x1080").
 	AtLeast string
 
-	// Resolution defines a list of allowed resolutions: "1920x1080,2400x1080"
+	// Resolution is a comma-separated list of exact resolutions
+	// (e.g., "1920x1080,2400x1080").
 	Resolution string
 
-	// Ratios defines a list of allowed ratios: "16x9,16x10"
+	// Ratios is a comma-separated list of aspect ratios
+	// (e.g., "16x9,16x10").
 	Ratios string
 
-	// Page specifies which page to obtain wallpapers
+	// Page is the result page to retrieve (1-based).
 	Page int
 
-	// Seed specifies the randomness if Sorting is set to "random"
+	// Seed is the randomization seed for consistent results when
+	// Sorting is "random". Reuse the same seed to get the same page.
 	Seed string
 }
 

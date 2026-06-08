@@ -1,6 +1,7 @@
 package gopaper
 
-// NewSearch initializes the default search parameters
+// NewSearch returns SearchParams with sensible and safe defaults:
+// Defaults to SFW content rating
 func NewSearch() SearchParams {
 	return SearchParams{
 		Purity:     "100",

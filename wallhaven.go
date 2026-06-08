@@ -15,7 +15,7 @@ var ErrAPICollections = errors.New("API required for retreiving collections")
 var ErrInvalidPageRange = errors.New("invalid page range")
 var ErrInvalidWallCount = errors.New("invalid wallpaper fetch count")
 
-// Search performs the search based on provided search parameters
+// Search queries the API for wallpapers matching the given search parameters
 func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
 	params := buildParams(sp, c.APIKey)
 
@@ -24,7 +24,7 @@ func (c *Client) Search(sp SearchParams) (SearchResponse, error) {
 	return doRequest[SearchResponse](buildURL)
 }
 
-// GetWallpaperDetails retrieves metadata of a wallpaper provided with the ID
+// GetWallpaperDetails retrieves wallpaper information or metadata from the given wallhaven appropriate wallpaper ID
 func (c *Client) GetWallpaperDetails(wallID string) (WallpaperResponse, error) {
 	params := buildBaseParams(c.APIKey)
 
@@ -33,7 +33,7 @@ func (c *Client) GetWallpaperDetails(wallID string) (WallpaperResponse, error) {
 	return doRequest[WallpaperResponse](buildURL)
 }
 
-// NextPage retrieves new results of the next page
+// NextPage queries the API using the same search parameters but page is incremented
 func (c *Client) NextPage(result SearchResponse, sp *SearchParams) (SearchResponse, error) {
 	if result.Metadata.CurrentPage >= result.Metadata.LastPage {
 		return SearchResponse{}, ErrLastPage
@@ -44,7 +44,7 @@ func (c *Client) NextPage(result SearchResponse, sp *SearchParams) (SearchRespon
 	return c.Search(*sp)
 }
 
-// PrevPage retrieves results of the previous page
+// PrevPage queries the API using the same search parameters but page is decremented
 func (c *Client) PrevPage(result SearchResponse, sp *SearchParams) (SearchResponse, error) {
 	if result.Metadata.CurrentPage <= 1 {
 		return SearchResponse{}, ErrFirstPage
@@ -55,7 +55,7 @@ func (c *Client) PrevPage(result SearchResponse, sp *SearchParams) (SearchRespon
 	return c.Search(*sp)
 }
 
-// SetPage retrieves results based on the provided page
+// SetPage queries the API using the same search parameters with a provided page number which to fetch
 func (c *Client) SetPage(result SearchResponse, sp *SearchParams, page int) (SearchResponse, error) {
 	if page > result.Metadata.LastPage {
 		return SearchResponse{}, ErrLastPage
@@ -68,6 +68,7 @@ func (c *Client) SetPage(result SearchResponse, sp *SearchParams, page int) (Sea
 	return c.Search(*sp)
 }
 
+// FetchPage queries the API to retrieve a slice of wallpapers in the given page number
 func (c *Client) FetchPage(sp *SearchParams, page int) ([]Wallpaper, error) {
 	if page <= 0 {
 		return nil, ErrInvalidPage
@@ -82,7 +83,7 @@ func (c *Client) FetchPage(sp *SearchParams, page int) ([]Wallpaper, error) {
 	return result.Wallpapers, nil
 }
 
-// FetchPages returns multiple wallpaper results based on the page range set on fromPage to toPage
+// FetchPages queries the API to retrieve a slice of wallpapers from a range of pages
 func (c *Client) FetchPages(sp *SearchParams, fromPage int, toPage int) ([]Wallpaper, error) {
 	var fetchedWalls []Wallpaper
 
@@ -117,7 +118,7 @@ func (c *Client) FetchPages(sp *SearchParams, fromPage int, toPage int) ([]Wallp
 	return fetchedWalls, nil
 }
 
-// FetchWallpaperCount returns wallpaper items depending on the wallCount
+// FetchWallpaperCount queries the API to fetch a number of wallpapers then returns a slice
 func (c *Client) FetchWallpaperCount(sp *SearchParams, wallCount int) ([]Wallpaper, error) {
 	var fetchedWalls []Wallpaper
 
@@ -153,7 +154,7 @@ func (c *Client) FetchWallpaperCount(sp *SearchParams, wallCount int) ([]Wallpap
 	return fetchedWalls, nil
 }
 
-// GetTagDetails retrieves details of a tag based on the tag ID
+// GetTagDetails returns tag metadata for a specific tag ID
 func (c *Client) GetTagDetails(tagID int) (TagResponse, error) {
 	params := buildBaseParams(c.APIKey)
 
@@ -162,7 +163,7 @@ func (c *Client) GetTagDetails(tagID int) (TagResponse, error) {
 	return doRequest[TagResponse](buildURL)
 }
 
-// GetSettings retrieves user settings data
+// GetSettings returns user settings
 func (c *Client) GetSettings() (SettingsResponse, error) {
 	if c.APIKey == "" {
 		return SettingsResponse{}, ErrAPISettings
@@ -175,7 +176,7 @@ func (c *Client) GetSettings() (SettingsResponse, error) {
 	return doRequest[SettingsResponse](buildURL)
 }
 
-// GetCollections retrieves user collection data
+// GetCollections returns the user's own collections
 func (c *Client) GetCollections() (CollectionResponse, error) {
 	if c.APIKey == "" {
 		return CollectionResponse{}, ErrAPICollections

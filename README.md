@@ -1,10 +1,14 @@
 # GoPaper
 
-A GO library to interact with the Wallhaven API to search and retrieve wallpapers
+[![GO documentation](https://pkg.go.dev/badge/github.com/Yustinia/gopaper.svg)](https://pkg.go.dev/github.com/Yustinia/gopaper)
+
+A Go library for interacting with the [Wallhaven](https://wallhaven.cc/) API to search and retrieve wallpapers.
 
 ## Installation
 
-```
+Installing the wrapper for use is as simple as:
+
+```bash
 go get github.com/Yustinia/gopaper
 ```
 
