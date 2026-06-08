@@ -68,6 +68,20 @@ func (c *Client) SetPage(result SearchResponse, sp *SearchParams, page int) (Sea
 	return c.Search(*sp)
 }
 
+func (c *Client) FetchPage(sp *SearchParams, page int) ([]Wallpaper, error) {
+	if page <= 0 {
+		return nil, ErrInvalidPage
+	}
+
+	sp.Page = page
+	result, err := c.Search(*sp)
+	if err != nil {
+		return nil, err
+	}
+
+	return result.Wallpapers, nil
+}
+
 // FetchPages returns multiple wallpaper results based on the page range set on fromPage to toPage
 func (c *Client) FetchPages(sp *SearchParams, fromPage int, toPage int) ([]Wallpaper, error) {
 	var fetchedWalls []Wallpaper
