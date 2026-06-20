@@ -1,5 +1,5 @@
-[tools]
-go = "1.25.10"
-
 [env]
 _.file = ".env"
+
+[tools]
+go = "1.25"
